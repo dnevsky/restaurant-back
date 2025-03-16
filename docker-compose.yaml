@@ -36,7 +36,7 @@ services:
     depends_on:
       - restaurant-db
     networks:
-      - restaurant_network
+      - app-restaurant-network
     environment:
       ENV: ${R_ENV}
       JWT_SECRET: ${R_JWT_SECRET}
@@ -44,9 +44,13 @@ services:
       PPROF_ENABLED: ${R_PPROF_ENABLED}
       PG_DSN: ${R_PG_DSN}
 
-
 networks:
   app-restaurant-network:
     name: restaurant_network
 volumes:
   postgres_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/github-deploy/postgresql/data

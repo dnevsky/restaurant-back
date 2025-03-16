@@ -32,8 +32,4 @@ jobs:
             R_PPROF_ENABLED=${{ secrets.PPROF_ENABLED }} \
             R_PG_DSN=${{ secrets.PG_DSN }} \
             POSTGRES_USER=${{ secrets.POSTGRES_USER }} \
-            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-            docker compose up -d
-
-
-
+            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} docker compose up -d
