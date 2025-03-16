@@ -23,7 +23,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
-            cd ~/restaurant-app
+            cd ~/restaurant-back
             git pull origin main
             make build
             R_ENV=${{ secrets.ENV }} \
