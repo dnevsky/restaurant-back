@@ -1,0 +1,52 @@
+version: "3.9"
+services:
+  restaurant-db:
+    image: postgres:17-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: "restaurant"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: pg_isready -U user -d restaurant
+      interval: 1s
+      timeout: 2s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "54324:5432"
+    networks:
+      - app-restaurant-network
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8081:8080"
+    networks:
+      - app-restaurant-network
+
+  restaurant:
+    image: dnevsky/restaurant-app
+    container_name: restaurant-app
+    restart: always
+    ports:
+      - "8884:8000"
+    depends_on:
+      - restaurant-db
+    networks:
+      - restaurant_network
+    environment:
+      ENV: ${R_ENV}
+      JWT_SECRET: ${R_JWT_SECRET}
+      DEBUG: ${R_DEBUG}
+      PPROF_ENABLED: ${R_PPROF_ENABLED}
+      PG_DSN: ${R_PG_DSN}
+
+
+networks:
+  app-restaurant-network:
+    name: restaurant_network
+volumes:
+  postgres_data:

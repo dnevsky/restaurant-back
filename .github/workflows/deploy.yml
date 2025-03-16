@@ -1,0 +1,37 @@
+name: Deploy to Remote Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: 22
+          script: |
+            cd ~/restaurant-app
+            git pull origin main
+            make build
+            R_ENV=${{ secrets.ENV }} \
+            R_JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            R_DEBUG=${{ secrets.DEBUG }} \
+            R_PPROF_ENABLED=${{ secrets.PPROF_ENABLED }} \
+            R_PG_DSN=${{ secrets.PG_DSN }} \
+            POSTGRES_USER=${{ secrets.POSTGRES_USER }} \
+            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            docker compose up -d
+
+
+
