@@ -4,7 +4,7 @@ type Table struct {
 	ID          uint         `json:"id" gorm:"primaryKey"`
 	Seat        int          `json:"seat"`
 	NumberSeats int          `json:"number_seats"`
-	Status      *TableStatus `json:"status" gorm:"->"`
+	Status      *TableStatus `json:"status" gorm:"-"`
 	Bookings    []Booking    `json:"bookings,omitempty" gorm:"foreignKey:TableID"`
 }
 
