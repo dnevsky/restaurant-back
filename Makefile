@@ -20,4 +20,20 @@ migration-create:
 .PHONY: migration-up migration-down migration-reset migration-create
 
 build:
-	docker build --tag dnevsky/restaurant-app .
+	go mod tidy
+	go build -o restaurant-app ./cmd/restaurant
+
+run:
+	./restaurant-app
+
+test:
+	go test ./... -v
+
+docker-build:
+	docker build -t restaurant-app .
+
+docker-run:
+	docker run -p 8000:8000 restaurant-app
+
+deploy:
+	docker compose up -d
