@@ -6,6 +6,7 @@ import (
 	"github.com/leebenson/conform"
 )
 
+// ...
 type FoodCreateDTO struct {
 	dto.ServiceDTO
 	Name        string `json:"name" form:"name" validate:"required,min=3,max=255"`
